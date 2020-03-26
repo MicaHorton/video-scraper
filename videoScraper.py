@@ -28,5 +28,5 @@ for episode in downloadLinks:
             downloadTsFile(link, path)
 
     join_file = createJoinFile(path)
-    convertToMP4(join_file)
+    convertToMP4(join_file, path)
 

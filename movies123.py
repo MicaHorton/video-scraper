@@ -52,13 +52,11 @@ def selectEpisodes(episodeLinks):
     import re
 
     print('Download Episodes?')
-    userList = re.findall('\d', input()) 
+    userList = re.findall('[0-9]+', input()) # results in list (that is iterated through number in userList)
     downloadLinks = []
 
     for item in episodeLinks: 
-        episodeNumber = re.findall('\d', item['name'])
-        episodeNumber = ''.join(episodeNumber)
-
+        episodeNumber = re.findall('[0-9]+', item['name'])[0] # results in list, but isn't iterated through, hence the [0]
         for number in userList: 
             if episodeNumber == number:
                 downloadLinks.append({'number':number,'url':item['url']})
@@ -136,7 +134,7 @@ def createJoinFile(path):
 
     return join_file
 
-def convertToMP4(join_file):
+def convertToMP4(join_file, path):
     import os
     import shutil
     import subprocess
