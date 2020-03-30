@@ -1,24 +1,49 @@
 # GET EPISODE LINKS
-def getEpisodePage(name, season):
-    from selenium import webdriver
-    driver = webdriver.Chrome()
-
-    # Get intro page 
+def getEpisodePage(name, season, driver):
     base = 'https://ww7.123moviesfree.sc/season/{name}-season-{season}/'
     introPage = base.format(name=name,season=season)
     driver.get(introPage)
+    
+    assert not '404' in driver.page_source
 
-    # Get episode page
     playButton = driver.find_element_by_xpath('//*[@id="mv-info"]/a') 
     episodePage = (playButton.get_attribute('href'))
 
-    driver.close()
     return episodePage
 
-def getEpisodeLinks(episodePage):
-    from selenium import webdriver
-    driver = webdriver.Chrome()
+def getEpisodePage2(name, season, driver):
+    pageFound = False
+    page = 1
 
+    while pageFound == False:
+        if page == 1:
+            driver.get('https://open123movies.com/tvshows')
+        else:
+            driver.get('https://open123movies.com/tvshows/page/' + str(page))
+
+        showList = driver.find_elements_by_xpath('//*[@data-movie-id="363"]/a')
+
+        for item in showList:
+            if name in item.get_attribute('href'):
+                item.click()
+                pageFound = True
+                break
+        
+        assert page != 40
+        page += 1
+
+    
+    seasonList = driver.find_elements_by_xpath('//div[@class="les-title"]/strong')
+    for item in seasonList:
+        if str(season) in item.get_attribute('innerHTML'):
+            # This is the right season, find the link attached to the div of an episode next to it
+            number = (1 + len(seasonList)) - seasonList.index(item)
+            xpath = '//*[@id="seasons"]/div[{number}]/div[2]/a[1]'.format(number=str(number))
+            print(xpath)
+            driver.find_element_by_xpath(xpath).click()
+
+
+def getEpisodeLinks(episodePage, driver):
     # Get all episodes by data-server attribute, then print (and store) episode name and video URL
     driver.get(episodePage)
     episodeLinks = []
@@ -44,7 +69,6 @@ def getEpisodeLinks(episodePage):
     for item in episodeLinks:
         print('{name:<80} {url:<80}'.format(name=item['name'], url=item['url']).rstrip())
 
-    driver.close()
     return episodeLinks
 
 # DOWNLOAD EPISODES
@@ -147,35 +171,6 @@ def convertToMP4(join_file, path):
     shutil.rmtree(path)
 
 
-'''
-from selenium import webdriver
-
-driver = webdriver.Chrome()
-episodePage = getEpisodePage(name, season)
-episodeLinks = getEpisodeLinks(episodePage)
-driver.close()
-
-
-downloadLinks = selectEpisodes(episodeLinks)
-for episode in downloadLinks:
-    tslinks = getFileLinks(episode)
-    path = makeDirectory(raw_name, season, downloadLinks['episode']])
-
-    print(len(tslinks),' files to install.')
-    for link in tslinks:
-        try:
-            downloadTsFile(link, path)
-        except OSError: 
-            print('Remote disconnected, waiting 5 seconds and trying again.')
-            time.sleep(5)
-            downloadTsFile(link, path)
-
-    join_file = createJoinFile(path)
-    convertToMP4(join_file)
-'''
-
-
-# turn download and num list into dictionary
 # find parent_dir automatically
-# fix counter thing
 # fix mutiple webdriver things
+

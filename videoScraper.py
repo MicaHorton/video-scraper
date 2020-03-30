@@ -8,8 +8,31 @@ season = input()
 # TRY 123MOVIES
 from movies123 import *
 
-episodePage = getEpisodePage(name, season)
-episodeLinks = getEpisodeLinks(episodePage)
+from selenium import webdriver
+driver = webdriver.Chrome()
+
+getEpisodePage2(name, season, driver)
+
+driver.close()
+
+
+
+
+'''
+try:
+    getEpisodePage(name, season, driver)
+except AssertionError:
+    try:
+        getEpisodePage2(name, season, driver)
+    except AssertionError:
+        print('Show not found.')
+
+episodePage = getEpisodePage()
+
+episodeLinks = getEpisodeLinks(episodePage, driver)
+
+driver.close()
+
 
 downloadLinks = selectEpisodes(episodeLinks)
 for episode in downloadLinks:
@@ -30,3 +53,4 @@ for episode in downloadLinks:
     join_file = createJoinFile(path)
     convertToMP4(join_file, path)
 
+'''
