@@ -8,8 +8,7 @@ def getEpisodePage(name, season, driver):
 
     playButton = driver.find_element_by_xpath('//*[@id="mv-info"]/a') 
     episodePage = (playButton.get_attribute('href'))
-
-    return episodePage
+    driver.get(episodePage)
 
 def getEpisodePage2(name, season, driver):
     pageFound = False
@@ -37,33 +36,25 @@ def getEpisodePage2(name, season, driver):
     for item in seasonList:
         if str(season) in item.get_attribute('innerHTML'):
             # This is the right season, find the link attached to the div of an episode next to it
-            number = (1 + len(seasonList)) - seasonList.index(item)
+            number = len(seasonList) - seasonList.index(item)
             xpath = '//*[@id="seasons"]/div[{number}]/div[2]/a[1]'.format(number=str(number))
-            print(xpath)
-            driver.find_element_by_xpath(xpath).click()
+
+            element = driver.find_element_by_xpath(xpath)
+            driver.execute_script("arguments[0].scrollIntoView();", element)
+            #driver.fullscreen_window()
+            
+            element.click()
 
 
-def getEpisodeLinks(episodePage, driver):
+def getEpisodeLinks(driver):
     # Get all episodes by data-server attribute, then print (and store) episode name and video URL
-    driver.get(episodePage)
     episodeLinks = []
-
-    # Try data-server 1
-    episodes = driver.find_elements_by_xpath('//a[@data-server="1"]')
+    episodes = driver.find_elements_by_xpath('(//div[@class="les-content"])[1]/a')
     for item in episodes:
         name = item.get_attribute('innerHTML')
-        url = item.get_attribute('data-strvid')
+        url = item.get_attribute('data-drive')
         if url != None: 
             episodeLinks.append({'name':name,'url':url})
-
-    # If not, try data-server 2
-    if episodes == []:
-        episodes = driver.find_elements_by_xpath('//a[@data-server="10"]')
-        for item in episodes:
-            name = item.get_attribute('innerHTML')
-            url = item.get_attribute('data-drive')
-            if url != None: 
-                episodeLinks.append({'name':name,'url':url})
     
     # Print episode links
     for item in episodeLinks:

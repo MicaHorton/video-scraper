@@ -19,3 +19,17 @@ https://www.codementor.io/@aviaryan/downloading-files-from-urls-in-python-77q3bs
 
 About TS Files
 https://stackoverflow.com/questions/22188332/download-ts-files-from-video-stream
+
+Current Thoughts
+#p = element.location
+            #actions.move_by_offset(p['x'],p['y']).click(element).perform()
+
+            #actions.move_to_element(element).move_by_offset(p['x'],p['y']).click(element).perform()
+
+            #link = driver.find_element_by_xpath(xpath + '/a[1]')
+            #print(link.get_attribute('outerHTML'))
+            #actions.move_to_element(element).click(element).perform()
+            #element.click()
+            #link = 'https://open123movies.com' + element.get_attribute('href')
+            #print(link)
+            #driver.get(link)s

@@ -11,14 +11,7 @@ from movies123 import *
 from selenium import webdriver
 driver = webdriver.Chrome()
 
-getEpisodePage2(name, season, driver)
 
-driver.close()
-
-
-
-
-'''
 try:
     getEpisodePage(name, season, driver)
 except AssertionError:
@@ -27,13 +20,10 @@ except AssertionError:
     except AssertionError:
         print('Show not found.')
 
-episodePage = getEpisodePage()
+episodeLinks = getEpisodeLinks(driver)
+#driver.close()
 
-episodeLinks = getEpisodeLinks(episodePage, driver)
-
-driver.close()
-
-
+'''
 downloadLinks = selectEpisodes(episodeLinks)
 for episode in downloadLinks:
     tslinks = getFileLinks(episode['url'])
