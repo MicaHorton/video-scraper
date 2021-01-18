@@ -17,5 +17,4 @@ About TS Files
 https://stackoverflow.com/questions/22188332/download-ts-files-from-video-stream
 
 How To Protect
-
 https://foliovision.com/player/securing-your-video/protecting-video-from-downloading#bare-video-files
