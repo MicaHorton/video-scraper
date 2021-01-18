@@ -10,6 +10,7 @@ def getEpisodePage(name, season, driver):
     episodePage = (playButton.get_attribute('href'))
     driver.get(episodePage)
 
+
 def getEpisodePage2(name, season, driver):
     pageFound = False
     page = 1
@@ -40,8 +41,8 @@ def getEpisodePage2(name, season, driver):
             xpath = '//*[@id="seasons"]/div[{number}]/div[2]/a[1]'.format(number=str(number))
 
             element = driver.find_element_by_xpath(xpath)
-            driver.execute_script("arguments[0].scrollIntoView();", element)
             #driver.fullscreen_window()
+            driver.execute_script("arguments[0].scrollIntoView();", element)
             
             element.click()
 
@@ -50,9 +51,10 @@ def getEpisodeLinks(driver):
     # Get all episodes by data-server attribute, then print (and store) episode name and video URL
     episodeLinks = []
     episodes = driver.find_elements_by_xpath('(//div[@class="les-content"])[1]/a')
+    
     for item in episodes:
         name = item.get_attribute('innerHTML')
-        url = item.get_attribute('data-drive')
+        url = item.get_attribute('data-strvid') #data-server one data-strvids
         if url != None: 
             episodeLinks.append({'name':name,'url':url})
     

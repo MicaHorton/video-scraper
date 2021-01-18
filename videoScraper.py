@@ -19,11 +19,10 @@ except AssertionError:
         getEpisodePage2(name, season, driver)
     except AssertionError:
         print('Show not found.')
-
 episodeLinks = getEpisodeLinks(driver)
-#driver.close()
+driver.close()
 
-'''
+
 downloadLinks = selectEpisodes(episodeLinks)
 for episode in downloadLinks:
     tslinks = getFileLinks(episode['url'])
@@ -43,4 +42,3 @@ for episode in downloadLinks:
     join_file = createJoinFile(path)
     convertToMP4(join_file, path)
 
-'''
